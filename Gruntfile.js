@@ -46,8 +46,22 @@ module.exports = function(grunt) {
         		dest: 'dist/'
         	},
         	jquery : {
-        		src : ['bower_components/jquery/dist/jquery.min.js'],
-        		dest : 'dist/'
+                expand: true,
+                cwd: 'bower_components/jquery/dist',
+        		src : ['jquery.min.js'],
+                rename: function(){return 'dist/js/lib/jquery.js';}
+        	},
+            backbone : {
+                expand: true,
+                cwd: 'bower_components/backbone',
+        		src : ['backbone.js'],
+                dest: 'dist/js/lib'
+        	},
+            underscore : {
+                expand: true,
+                cwd: 'bower_components/underscore',
+        		src : ['underscore-min.js'],
+                rename: function(){return 'dist/js/lib/underscore.js';}
         	},
         	css : {
         		src : ['css/*.*'],
