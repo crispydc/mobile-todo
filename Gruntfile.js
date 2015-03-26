@@ -13,12 +13,11 @@ module.exports = function(grunt) {
         },
 
         jshint : {
-			src : [ 'js/*.js'],
+			src : [ 'js/*.js', '!js/lib/*.js'],
 			options : {
 				laxbreak : true,
 				smarttabs : true,
 				globals : {
-					$ : false,
 					jQuery : false,
 					Storage : false,
 					localStorage : true,
@@ -41,36 +40,22 @@ module.exports = function(grunt) {
         },
         
         copy : {
-        	js : {
-        		src : ['js/**/*.js'],
+            html: {
+                src : ['*.html'],
+                dest: 'dist/'
+            },
+        	jslib : {
+        		src : ['js/lib/*.js'],
         		dest: 'dist/'
         	},
-        	jquery : {
-                expand: true,
-                cwd: 'bower_components/jquery/dist',
-        		src : ['jquery.min.js'],
-                rename: function(){return 'dist/js/lib/jquery.js';}
-        	},
-            backbone : {
-                expand: true,
-                cwd: 'bower_components/backbone',
-        		src : ['backbone.js'],
-                dest: 'dist/js/lib'
-        	},
-            underscore : {
-                expand: true,
-                cwd: 'bower_components/underscore',
-        		src : ['underscore-min.js'],
-                rename: function(){return 'dist/js/lib/underscore.js';}
-        	},
         	css : {
-        		src : ['css/*.*'],
+        		src : ['css/**/*.*'],
         		dest : 'dist/'
         	}
 		},
         
         browserify: {
-            'dist/js/todo.js': ['/js/main.js']
+            'dist/js/todo.js': ['js/main.js']
         }
     });
 
