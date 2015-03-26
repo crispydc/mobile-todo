@@ -1,0 +1,14 @@
+{
+  "name": "mobile-todo",
+  "version": "0.0.1",
+  "description": "Playground app for exploring mobile application with backbone + JQM + Cordova",
+  "main": "Gruntfile.js",
+  "author": "crispydc",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-copy": "~0.7.0",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-watch": "~0.5.3"
+  }
+}
