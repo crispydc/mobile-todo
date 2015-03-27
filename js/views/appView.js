@@ -27,6 +27,7 @@ var AppView = Backbone.View.extend({
         }
         this.collection.create(this.newAttributes());
         this.input.val(''); // clean input box
+        this.$('.ui-listview').listview('refresh'); //refresh list
     },
     
     addOne: function (todo) {

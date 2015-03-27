@@ -13,21 +13,25 @@ var TodoView = Backbone.View.extend({
     },
     template: _.template($('#item-template').html()),
     render: function () {
-        this.$el.html(this.template(this.model.toJSON()));
+        this.$el.html(this.template(this.model.toJSON())).enhanceWithin();
+        this.$('.toggle').prop('checked', this.model.get('completed'));
         this.input = this.$('.edit');
         return this; // enable chained calls
     },
     initialize: function () {
         this.model.on('change', this.render, this);
+        this.model.on('destroy', this.remove, this); // remove: Convenience Backbone's function for removing the view from the DOM.
     },
     events: {
         'dblclick label': 'edit',
         'keypress .edit': 'updateOnEnter',
-        'blur .edit': 'close'
+        'blur .edit': 'close',
+        'click .toggle': 'toggleCompleted',
+        'click .destroy': 'destroy'
     },
     edit: function () {
         console.log('here');
-        this.$el.find('.hider').removeClass('ui-screen-hidden');
+        this.$('.hider').removeClass('ui-screen-hidden');
         this.input.focus();
     },
     close: function () {
@@ -37,12 +41,18 @@ var TodoView = Backbone.View.extend({
                 title: value
             });
         }
-        this.$el.find('.hider').addClass('ui-screen-hidden');
+        this.$('.hider').addClass('ui-screen-hidden');
     },
     updateOnEnter: function (e) {
         if (e.which == 13) {
             this.close();
         }
+    },
+    toggleCompleted: function () {
+        this.model.toggle();
+    },
+    destroy: function(){
+        this.model.destroy();
     }
 });
 
