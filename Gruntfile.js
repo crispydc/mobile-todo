@@ -13,7 +13,7 @@ module.exports = function(grunt) {
         },
 
         jshint : {
-			src : [ 'js/*.js', '!js/lib/*.js'],
+			src : [ 'js/**/*.js', '!js/lib/*.js'],
 			options : {
 				laxbreak : true,
 				smarttabs : true,
@@ -35,7 +35,7 @@ module.exports = function(grunt) {
             },
             js: {
             	files: ['js/**/*.js'],
-            	tasks: ['jshint', 'copy:js']
+            	tasks: ['dist-js']
             }
         },
         
@@ -44,10 +44,6 @@ module.exports = function(grunt) {
                 src : ['*.html'],
                 dest: 'dist/'
             },
-        	jslib : {
-        		src : ['js/lib/*.js'],
-        		dest: 'dist/'
-        	},
         	css : {
         		src : ['css/**/*.*'],
         		dest : 'dist/'
