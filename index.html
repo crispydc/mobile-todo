@@ -6,6 +6,7 @@
     <title>Hello World in Backbone.js</title>
     
     <link rel="stylesheet" href="css/lib/jquery.mobile.css" />
+    <link rel="stylesheet" href="css/todo.css" />
 </head>
 <body>
     <div data-role="page" id="todoapp">
@@ -14,7 +15,7 @@
             <input id="new-todo" placeholder="What needs to be done?">
         </header>
         <section id="main">
-            <ul id="todo-list"></ul>
+            <ul id="todo-list" data-role="listview"></ul>
         </section>
     </div>
 
@@ -22,6 +23,7 @@
       <div class="view">
         <input class="toggle" type="checkbox">
         <label><%- title %></label>
+        <div class="hider ui-screen-hidden"><input class="edit" data-enhance="false" value="<%- title %>"></div>
       </div>
     </script>
     
