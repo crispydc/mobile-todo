@@ -16,12 +16,10 @@ $(document).on("mobileinit", function () {
 });
 
 //Load Views
-var HwView = require('./views/hwView');
 var AppView = require('./views/appView');
 
 //Load Collections
 var TodoCollection = require('./collections/todoList');
 
 //Initialize views
-var hwView = new HwView();
 var appView = new AppView({collection: new TodoCollection()});
