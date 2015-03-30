@@ -56,6 +56,16 @@ module.exports = function(grunt) {
         
         browserify: {
             'dist/js/todo.js': ['js/main.js']
+        },
+        
+        connect: {
+            server: {
+                options: {
+                    port: 8080,
+                    base: 'dist',
+                    keepalive: true
+                }
+            }
         }
     });
 
@@ -65,7 +75,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-browserify');
-
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    
     //JS distribution task.
     grunt.registerTask('dist-js', ['jshint', 'browserify']);
 
