@@ -4,22 +4,23 @@ Main application script
 
 //Initialize Frameworks
 var $ = require('jquery');
-$.mobile = require('jquery-mobile');
+var Backbone = require('backbone');
+Backbone.$ = $;
 
 //Setup JQM
 $(document).on("mobileinit", function () {
+    console.log('setting JQM things');
     // Prevents all anchor click handling including the addition of active button state and alternate link bluring.
     $.mobile.linkBindingEnabled = false;
 
     // Disabling this will prevent jQuery Mobile from handling hash changes
     $.mobile.hashListeningEnabled = false;
 });
+$.mobile = require('jquery-mobile');
 
-//Load Views
-var AppView = require('./views/appView');
+//Initialize router
+var TodoRouter = require('./routes/todoRouter');
+var todoRouter = new TodoRouter();
 
-//Load Collections
-var TodoCollection = require('./collections/todoList');
-
-//Initialize views
-var appView = new AppView({collection: new TodoCollection()});
+//start Backbone history
+Backbone.history.start();

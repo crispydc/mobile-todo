@@ -2,6 +2,7 @@
 var $ = require('jquery');
 var Backbone = require('backbone');
 Backbone.$ = $;
+var _ = require('underscore');
 var TodoList = require('../collections/TodoList');
 var TodoView = require('./todoView');
 
@@ -16,11 +17,11 @@ var AppView = Backbone.View.extend({
         this.collection.on('reset', this.addAll, this);
         this.collection.fetch(); // Loads list from local storage
     },
-    
+
     events: {
         'keypress #new-todo': 'createTodoOnEnter'
     },
-    
+
     createTodoOnEnter: function (e) {
         if (e.which !== 13 || !this.input.val().trim()) { // ENTER_KEY = 13
             return;
@@ -29,19 +30,33 @@ var AppView = Backbone.View.extend({
         this.input.val(''); // clean input box
         this.$('.ui-listview').listview('refresh'); //refresh list
     },
-    
+
     addOne: function (todo) {
         var view = new TodoView({
             model: todo
         });
         $('#todo-list').append(view.render().el);
     },
-    
+
     addAll: function () {
         this.$('#todo-list').html(''); // clean the todo list
-        this.collection.each(this.addOne, this);
+        
+        // filter todo item list
+        switch (this.filter) {
+            case 'pending':
+                _.each(this.collection.remaining(), this.addOne);
+                break;
+            case 'completed':
+                _.each(this.collection.completed(), this.addOne);
+                break;
+            default:
+                this.collection.each(this.addOne, this);
+                break;
+        }
+        
+        this.$('.ui-listview').listview('refresh'); //refresh list
     },
-    
+
     newAttributes: function () {
         return {
             title: this.input.val().trim(),
