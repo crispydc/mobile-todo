@@ -9,7 +9,7 @@ Backbone.$ = $;
 
 //Setup JQM
 $(document).on("mobileinit", function () {
-    console.log('setting JQM things');
+    console.log('JQM');
     // Prevents all anchor click handling including the addition of active button state and alternate link bluring.
     $.mobile.linkBindingEnabled = false;
 
@@ -18,9 +18,9 @@ $(document).on("mobileinit", function () {
 });
 $.mobile = require('jquery-mobile');
 
-//Initialize router
-var TodoRouter = require('./routes/todoRouter');
-var todoRouter = new TodoRouter();
+//Initialize routers
+var MenuRouter = require('./routes/menuRouter');
+var menuRouter = new MenuRouter();
 
 //start Backbone history
 Backbone.history.start();

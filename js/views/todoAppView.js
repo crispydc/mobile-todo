@@ -7,11 +7,12 @@ var TodoList = require('../collections/TodoList');
 var TodoView = require('./todoView');
 
 // renders the full list of todo items calling TodoView for each one.
-var AppView = Backbone.View.extend({
+var TodoAppView = Backbone.View.extend({
     el: '#todoapp',
     collection: TodoList,
     initialize: function () {
         this.input = this.$('#new-todo');
+        
         // when new elements are added to the collection render then with addOne
         this.collection.on('add', this.addOne, this);
         this.collection.on('reset', this.addAll, this);
@@ -65,4 +66,4 @@ var AppView = Backbone.View.extend({
     }
 });
 
-module.exports = AppView;
+module.exports = TodoAppView;

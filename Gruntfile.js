@@ -13,7 +13,7 @@ module.exports = function(grunt) {
         },
 
         jshint : {
-			src : [ 'js/**/*.js', '!js/lib/*.js'],
+			src : [ 'js/**/*.js', '!js/libs/*.js'],
 			options : {
 				laxbreak : true,
 				smarttabs : true,

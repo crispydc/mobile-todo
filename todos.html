@@ -1,0 +1,23 @@
+<div data-role="page" id="todoapp">
+    <header id="header">
+        <h1>Todos</h1>
+        <input id="new-todo" placeholder="What needs to be done?">
+        <div>
+            <a href="index.html#todo/">show all</a> |
+            <a href="index.html#/todo/pending">show pending</a> |
+            <a href="index.html#/todo/completed">show completed</a>
+        </div>
+    </header>
+    <section id="main">
+        <ul id="todo-list" data-role="listview"></ul>
+    </section>
+
+    <script type="text/template" id="item-template">
+      <div class="view">
+        <input class="toggle" type="checkbox">
+        <label><%- title %></label>
+        <div class="hider ui-screen-hidden"><input class="edit" data-enhance="false" value="<%- title %>"></div>
+        <button class="destroy">remove</button>
+      </div>
+    </script>
+</div>

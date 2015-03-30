@@ -11,7 +11,6 @@ var TodoView = Backbone.View.extend({
     attributes: {
         'data-role': 'field-contain'
     },
-    template: _.template($('#item-template').html()),
     render: function () {
         this.$el.html(this.template(this.model.toJSON())).enhanceWithin();
         this.$('.toggle').prop('checked', this.model.get('completed'));
@@ -19,6 +18,9 @@ var TodoView = Backbone.View.extend({
         return this; // enable chained calls
     },
     initialize: function () {
+        //setup template
+        this.template = _.template($('#item-template').html());
+        
         this.model.on('change', this.render, this);
         this.model.on('destroy', this.remove, this); // remove: Convenience Backbone's function for removing the view from the DOM.
     },
