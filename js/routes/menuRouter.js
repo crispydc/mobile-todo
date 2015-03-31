@@ -5,14 +5,16 @@ Backbone.$ = $;
 var TodoAppView = require('../views/todoAppView');
 var TodoRouter = require('./todoRouter');
 var TodoCollection = require('../collections/todoList');
+var DragView = require('../views/dragView');
 
 var MenuRouter = Backbone.Router.extend({
     routes: {
         'todo': 'changeTodo',
-        '': 'home'
+        '': 'home',
+        'drag': 'changeToDrag'
     },
     initialize: function(options) {
-        this.todoRouter = new TodoRouter();
+        //nothing to do here
     },
     home: function() {
         //change back to menu page
@@ -20,9 +22,13 @@ var MenuRouter = Backbone.Router.extend({
     },
     changeTodo: function () {
         
-        //load external page
+        //setup todo router
+        if(!this.todoRouter) {
+            this.todoRouter = new TodoRouter();
+        }
         var todoRouter = this.todoRouter;
         
+        //load external page
         $( ":mobile-pagecontainer" ).pagecontainer('load', 'todos.html').done(function() {
             //setup the view objects
             var todoList = new TodoCollection();
@@ -34,6 +40,19 @@ var MenuRouter = Backbone.Router.extend({
             
             //finally change to the new page
             $.mobile.changePage('#todoapp', {changeHash: false, reverse: false});
+        });
+    },
+    
+    changeToDrag: function() {
+        
+        //load external page
+        $.mobile.pageContainer.pagecontainer('load', 'drag.html').done(function() {
+            
+            //init view
+            this.dragView = new DragView();
+            
+            //change to new page
+            $.mobile.changePage('#dragdemo', {changeHash: false, reverse: false});
         });
     }
 });
