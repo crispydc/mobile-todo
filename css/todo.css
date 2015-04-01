@@ -1,0 +1,43 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+#todo-list label {
+    padding-left: 30px;
+}
+
+#todo-list .ui-checkbox input {
+    margin: -2px 0 0 0;
+}
+
+#drag {
+    width: 100%;
+    height: 500px;
+    visibility: hidden;
+    margin: 100px 0;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
+#drag li .drag-page-content {
+    margin: 0 100px;
+    text-align: center;
+    line-height: 500px;
+    height: 100%;
+    color: #fff;
+}
+
+#drag li.first .drag-page-content {
+    background: #577;
+}
+
+#drag li.middle .drag-page-content {
+    background: #1e8;
+}
+
+#drag li.last .drag-page-content {
+    background: #e8b;
+}

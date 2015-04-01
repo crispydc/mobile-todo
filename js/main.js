@@ -9,7 +9,6 @@ Backbone.$ = $;
 
 //Setup JQM
 $(document).on("mobileinit", function () {
-    console.log('JQM');
     // Prevents all anchor click handling including the addition of active button state and alternate link bluring.
     $.mobile.linkBindingEnabled = false;
 
