@@ -36,7 +36,7 @@ var TodoAppView = Backbone.View.extend({
         var view = new TodoView({
             model: todo
         });
-        $('#todo-list').append(view.render().el);
+        $('#todo-list').append(view.render().el).listview('refresh');
     },
 
     addAll: function () {
@@ -54,8 +54,6 @@ var TodoAppView = Backbone.View.extend({
                 this.collection.each(this.addOne, this);
                 break;
         }
-        
-        this.$('.ui-listview').listview('refresh'); //refresh list
     },
 
     newAttributes: function () {
