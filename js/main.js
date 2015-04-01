@@ -17,6 +17,11 @@ $(document).on("mobileinit", function () {
 });
 $.mobile = require('jquery-mobile');
 
+//Setup Cordova
+$(document).on('deviceready', function() {
+    $('#cdvmsg').show();
+});
+
 //Initialize routers
 var MenuRouter = require('./routes/menuRouter');
 var menuRouter = new MenuRouter();

@@ -9,7 +9,8 @@ module.exports = function(grunt) {
 
         // Task configuration.
         clean: {
-            dist: ['dist/js', 'dist/*.html', 'dist/img/', 'dist/css', 'dist/bower_components']
+            dist: ['dist/js', 'dist/*.html', 'dist/img/', 'dist/css'],
+            device: ['cdv-app/www/js', 'cdv-app/www/*.html', 'cdv-app/www/img/', 'cdv-app/www/css']
         },
 
         jshint : {
@@ -33,14 +34,15 @@ module.exports = function(grunt) {
             	files: ['*.html'],
             	tasks: ['copy:html']
             },
-            js: {
-            	files: ['js/**/*.js'],
-            	tasks: ['dist-js']
+            lint: {
+            	files: ['js/**/*.js', '!js/libs/**/*'],
+            	tasks: ['jshint']
             },
             css: {
                 files: ['css/**/*.*'],
                 tasks: ['copy:css']
             }
+        
         },
         
         copy : {
@@ -51,19 +53,34 @@ module.exports = function(grunt) {
         	css : {
         		src : ['css/**/*.*'],
         		dest : 'dist/'
-        	}
+        	},
+            device : {
+                cwd: 'dist/',
+                expand: true,
+                src : ['**/*', '!js/**/*'],
+                dest: 'cdv-app/www/'
+            }
 		},
         
         browserify: {
-            'dist/js/todo.js': ['js/main.js']
+            device: {
+                dest: 'cdv-app/www/js/todo.js',
+                src: ['js/main.js']
+            },
+            web: {
+                dest: 'dist/js/todo.js',
+                src: ['js/main.js'],
+                options: {
+                    watch: true
+                }
+            }
         },
         
         connect: {
             server: {
                 options: {
                     port: 8080,
-                    base: 'dist',
-                    keepalive: true
+                    base: 'dist'
                 }
             }
         }
@@ -77,12 +94,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-connect');
     
-    //JS distribution task.
-    grunt.registerTask('dist-js', ['jshint', 'browserify']);
-
-    // Full distribution task.
-    grunt.registerTask('dist', ['clean', 'dist-js', 'copy']);
+    // super dev tasks that runs all the watches and dev server!
+    grunt.registerTask('dev', ['copy:html', 'copy:css', 'browserify:web', 'connect', 'watch']);
+    
+    // device distribution task
+    grunt.registerTask('device', ['clean:device', 'browserify:device', 'copy:device']);
+    
+    // web distribution task.
+    grunt.registerTask('web', ['clean:dist', 'jshint', 'browserify:web', 'copy:html', 'copy:css']);
     
     // Default task.
-    grunt.registerTask('default', ['dist']);
+    grunt.registerTask('default', ['dev']);
 };
