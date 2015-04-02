@@ -1,0 +1,20 @@
+<div data-role="page" id="geo">
+    <header id="header">
+        <h1>Geo Demo</h1>
+    </header>
+    <section id="main">
+        <h3 id="loadMsg">Obtaining location....</h3>
+        <ul data-role="listview" class="ui-screen-hidden" id="geoStats"></ul>
+    </section>
+
+    <script type="text/template" id="geo-template">
+      <li>Latitude: <%- lat %></li>
+      <li>Longitude: <%- lng %></li>
+      <li>Altitude: <%- alt %></li>
+      <li>Accuracy: <%- acc %></li>
+      <li>Altitude Accuracy: <%- altAcc %></li>
+      <li>Heading: <%- head %></li>
+      <li>Speed: <%- speed %></li>
+      <li>Timestamp: <%- time %></li>
+    </script>
+</div>

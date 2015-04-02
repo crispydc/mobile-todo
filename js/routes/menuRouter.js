@@ -6,12 +6,15 @@ var TodoAppView = require('../views/todoAppView');
 var TodoRouter = require('./todoRouter');
 var TodoCollection = require('../collections/todoList');
 var DragView = require('../views/dragView');
+var Geo = require('../models/geo');
+var GeoView = require('../views/geoView');
 
 var MenuRouter = Backbone.Router.extend({
     routes: {
         'todo': 'changeTodo',
         '': 'home',
-        'drag': 'changeToDrag'
+        'drag': 'changeToDrag',
+        'geo': 'changeToGeo'
     },
     initialize: function(options) {
         //nothing to do here
@@ -53,6 +56,19 @@ var MenuRouter = Backbone.Router.extend({
             
             //change to new page
             $.mobile.changePage('#dragdemo', {changeHash: false, reverse: false});
+        });
+    },
+    
+    changeToGeo: function() {
+        
+        //load external page
+        $.mobile.pageContainer.pagecontainer('load', 'geo.html').done(function() {
+            
+            //init view
+            this.geoView = new GeoView({model: new Geo()});
+            
+            //change to new page
+            $.mobile.changePage('#geo', {changeHash: false, reverse: false});
         });
     }
 });
