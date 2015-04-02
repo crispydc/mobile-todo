@@ -32,7 +32,6 @@ var TodoView = Backbone.View.extend({
         'click .destroy': 'destroy'
     },
     edit: function () {
-        console.log('here');
         this.$('.hider').removeClass('ui-screen-hidden');
         this.input.focus();
     },
