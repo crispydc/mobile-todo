@@ -21,9 +21,9 @@ var TodoList = Backbone.Collection.extend({
 });
 
 module.exports = TodoList;
-},{"../models/todo":6,"backbone":13,"backbone.localstorage":12,"jquery":15}],2:[function(require,module,exports){
+},{"../models/todo":7,"backbone":15,"backbone.localstorage":14,"jquery":17}],2:[function(require,module,exports){
 arguments[4][1][0].apply(exports,arguments)
-},{"../models/todo":6,"backbone":13,"backbone.localstorage":12,"dup":1,"jquery":15}],3:[function(require,module,exports){
+},{"../models/todo":7,"backbone":15,"backbone.localstorage":14,"dup":1,"jquery":17}],3:[function(require,module,exports){
 (function (global){
 
 ; jQuery = global.jQuery = require("/Users/cperry/src/otherdev/mobile-todo/node_modules/jquery/dist/jquery.min.js");
@@ -34,7 +34,7 @@ arguments[4][1][0].apply(exports,arguments)
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/Users/cperry/src/otherdev/mobile-todo/node_modules/jquery/dist/jquery.min.js":15}],4:[function(require,module,exports){
+},{"/Users/cperry/src/otherdev/mobile-todo/node_modules/jquery/dist/jquery.min.js":17}],4:[function(require,module,exports){
 (function (global){
 
 ; jQuery = global.jQuery = require("/Users/cperry/src/otherdev/mobile-todo/node_modules/jquery/dist/jquery.min.js");
@@ -54,7 +54,7 @@ if(this._resizeData){if(a.x===this._resizeData.windowCoordinates.x&&a.y===this._
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/Users/cperry/src/otherdev/mobile-todo/node_modules/jquery/dist/jquery.min.js":15}],5:[function(require,module,exports){
+},{"/Users/cperry/src/otherdev/mobile-todo/node_modules/jquery/dist/jquery.min.js":17}],5:[function(require,module,exports){
 /************
 Main application script
 *************/
@@ -85,7 +85,28 @@ var menuRouter = new MenuRouter();
 
 //start Backbone history
 Backbone.history.start();
-},{"./routes/menuRouter":7,"backbone":13,"jquery":15,"jquery-mobile":4}],6:[function(require,module,exports){
+},{"./routes/menuRouter":8,"backbone":15,"jquery":17,"jquery-mobile":4}],6:[function(require,module,exports){
+//Dependencies
+var Backbone = require('backbone');
+var $ = require('jquery');
+Backbone.$ = $;
+
+//Model definition
+var Geo = Backbone.Model.extend({
+    defaults: {
+        lat: '',
+        lng: '',
+        alt: '',
+        acc: '',
+        altAcc: '',
+        head: '',
+        speed: '',
+        time: ''
+    }
+});
+
+module.exports = Geo;
+},{"backbone":15,"jquery":17}],7:[function(require,module,exports){
 //Dependencies
 var Backbone = require('backbone');
 var $ = require('jquery');
@@ -103,7 +124,7 @@ var Todo = Backbone.Model.extend({
 });
 
 module.exports = Todo;
-},{"backbone":13,"jquery":15}],7:[function(require,module,exports){
+},{"backbone":15,"jquery":17}],8:[function(require,module,exports){
 //Dependencies
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -112,12 +133,15 @@ var TodoAppView = require('../views/todoAppView');
 var TodoRouter = require('./todoRouter');
 var TodoCollection = require('../collections/todoList');
 var DragView = require('../views/dragView');
+var Geo = require('../models/geo');
+var GeoView = require('../views/geoView');
 
 var MenuRouter = Backbone.Router.extend({
     routes: {
         'todo': 'changeTodo',
         '': 'home',
-        'drag': 'changeToDrag'
+        'drag': 'changeToDrag',
+        'geo': 'changeToGeo'
     },
     initialize: function(options) {
         //nothing to do here
@@ -160,11 +184,24 @@ var MenuRouter = Backbone.Router.extend({
             //change to new page
             $.mobile.changePage('#dragdemo', {changeHash: false, reverse: false});
         });
+    },
+    
+    changeToGeo: function() {
+        
+        //load external page
+        $.mobile.pageContainer.pagecontainer('load', 'geo.html').done(function() {
+            
+            //init view
+            this.geoView = new GeoView({model: new Geo()});
+            
+            //change to new page
+            $.mobile.changePage('#geo', {changeHash: false, reverse: false});
+        });
     }
 });
 
 module.exports = MenuRouter;
-},{"../collections/todoList":2,"../views/dragView":9,"../views/todoAppView":10,"./todoRouter":8,"backbone":13,"jquery":15}],8:[function(require,module,exports){
+},{"../collections/todoList":2,"../models/geo":6,"../views/dragView":10,"../views/geoView":11,"../views/todoAppView":12,"./todoRouter":9,"backbone":15,"jquery":17}],9:[function(require,module,exports){
 //Dependencies
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -184,7 +221,7 @@ var TodoRouter = Backbone.Router.extend({
 });
 
 module.exports = TodoRouter;
-},{"backbone":13,"jquery":15}],9:[function(require,module,exports){
+},{"backbone":15,"jquery":17}],10:[function(require,module,exports){
 //Dependencies
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -211,7 +248,66 @@ var DragView = Backbone.View.extend({
 });
 
 module.exports = DragView;
-},{"backbone":13,"dragend":3,"jquery":15}],10:[function(require,module,exports){
+},{"backbone":15,"dragend":3,"jquery":17}],11:[function(require,module,exports){
+//Dependencies
+var $ = require('jquery');
+var Backbone = require('backbone');
+Backbone.$ = $;
+var _ = require('underscore');
+var Geo = require('../models/geo');
+
+var GeoView = Backbone.View.extend({
+    el: '#geoStats',
+    model: Geo,
+    initialize: function () {
+
+        //setup template
+        this.template = _.template($('#geo-template').html());
+
+        //setup event handler for pagechange event to capture location
+        $(document).one('pagechange', this, function (e) {
+            var view = e.data;
+            
+            //gather positioning data
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    view.locSuccess(position);
+            }, function (error) {
+                    view.locError(error);
+            }, {enableHighAccuracy: true});
+        });
+    },
+
+    locSuccess: function (position) {
+
+        //fill model values
+        this.model.set({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            alt: position.coords.altitude,
+            acc: position.coords.accuracy,
+            altAcc: position.coords.alititudeAccuracy,
+            head: position.coords.heading,
+            speed: position.coords.speed,
+            time: position.timestamp
+        });
+
+        //fill in the template
+        this.$el.html(this.template(this.model.toJSON()));
+
+        //show the listview and hide the loading message
+        $('#loadMsg').hide();
+        this.$el.listview('refresh').removeClass('ui-screen-hidden');
+    },
+
+    locError: function (error) {
+        alert('code: ' + error.code + '\n' +
+            'message: ' + error.message + '\n');
+    }
+});
+
+module.exports = GeoView;
+},{"../models/geo":6,"backbone":15,"jquery":17,"underscore":18}],12:[function(require,module,exports){
 //Dependencies
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -279,7 +375,7 @@ var TodoAppView = Backbone.View.extend({
 });
 
 module.exports = TodoAppView;
-},{"../collections/TodoList":1,"./todoView":11,"backbone":13,"jquery":15,"underscore":16}],11:[function(require,module,exports){
+},{"../collections/TodoList":1,"./todoView":13,"backbone":15,"jquery":17,"underscore":18}],13:[function(require,module,exports){
 //Dependencies
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -314,7 +410,6 @@ var TodoView = Backbone.View.extend({
         'click .destroy': 'destroy'
     },
     edit: function () {
-        console.log('here');
         this.$('.hider').removeClass('ui-screen-hidden');
         this.input.focus();
     },
@@ -341,7 +436,7 @@ var TodoView = Backbone.View.extend({
 });
 
 module.exports = TodoView;
-},{"../collections/todoList":2,"backbone":13,"jquery":15,"underscore":16}],12:[function(require,module,exports){
+},{"../collections/todoList":2,"backbone":15,"jquery":17,"underscore":18}],14:[function(require,module,exports){
 /**
  * Backbone localStorage Adapter
  * Version 1.1.16
@@ -601,7 +696,7 @@ Backbone.sync = function(method, model, options) {
 return Backbone.LocalStorage;
 }));
 
-},{"backbone":13}],13:[function(require,module,exports){
+},{"backbone":15}],15:[function(require,module,exports){
 //     Backbone.js 1.1.2
 
 //     (c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -2211,7 +2306,7 @@ return Backbone.LocalStorage;
 
 }));
 
-},{"underscore":14}],14:[function(require,module,exports){
+},{"underscore":16}],16:[function(require,module,exports){
 //     Underscore.js 1.8.2
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -3749,7 +3844,7 @@ return Backbone.LocalStorage;
   }
 }.call(this));
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function (global){
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*! jQuery v2.1.3 | (c) 2005, 2014 jQuery Foundation, Inc. | jquery.org/license */
@@ -3762,6 +3857,6 @@ return Backbone.LocalStorage;
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],16:[function(require,module,exports){
-arguments[4][14][0].apply(exports,arguments)
-},{"dup":14}]},{},[5]);
+},{}],18:[function(require,module,exports){
+arguments[4][16][0].apply(exports,arguments)
+},{"dup":16}]},{},[5]);
